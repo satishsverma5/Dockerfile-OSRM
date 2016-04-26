@@ -10,20 +10,19 @@ RUN apt-get update
 
 RUN sudo apt-get install -y build-essential git cmake pkg-config \
          libbz2-dev libstxxl-dev libstxxl1 libxml2-dev \
-         libzip-dev libboost-all-dev lua5.1 liblua5.1-0-dev libluabind-dev libtbb-dev wget vim
+         libzip-dev libboost-all-dev lua5.1 liblua5.1-0-dev libluabind-dev libtbb-dev wget vim git
 
 # Create Directory
-RUN mkdir -p /var/www/OSRM  &&  cd /var/www/OSRM  && 
-    git clone https://github.com/Project-OSRM/osrm-backend.git .
+RUN mkdir -p /var/www/OSRM  &&  cd /var/www/OSRM  && git clone https://github.com/Project-OSRM/osrm-backend.git .
 
-RUN mkdir -p /var/www/OSRM/build        &&
-    cd /var/www/OSRM/build              && 
-    cmake .. -DCMAKE_BUILD_TYPE=Release && 
-    cmake --build .                     && 
+RUN mkdir -p /var/www/OSRM/build        && \
+    cd /var/www/OSRM/build              && \
+    cmake .. -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build .                     && \
     cmake --build . --target install
 
 
-RUN cd /var/www/OSRM && 
+RUN cd /var/www/OSRM && \
     wget http://download.geofabrik.de/asia/india-latest.osm.pbf
 
 RUN cd /var/www/OSRM && osrm-extract -p profile.lua india-latest.osm.pbf
